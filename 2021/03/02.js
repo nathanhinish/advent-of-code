@@ -1,5 +1,6 @@
 console.time("Run time");
 process.chdir(__dirname);
+let answer;
 
 const getLinesOfFile = require("../common/getLinesOfFile");
 const lineLen = 12;
@@ -19,7 +20,6 @@ for (let i = 0; i < lineLen; i++) {
     break;
   }
 }
-
 
 let co2lines = [...lines];
 for (let i = 0; i < lineLen; i++) {
@@ -41,6 +41,9 @@ const co2 = parseInt(co2lines[0], 2);
 
 console.info("O2 ", o2lines, o2);
 console.info("CO2", co2lines, co2);
-console.info(o2 * co2);
+console.info("");
 
+answer = o2 * co2;
+
+console.info("Answer:", answer);
 console.timeEnd("Run time");

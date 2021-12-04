@@ -1,5 +1,6 @@
 console.time("Run time");
 process.chdir(__dirname);
+let answer;
 
 const getLinesOfFile = require("../common/getLinesOfFile");
 const lines = getLinesOfFile("./input");
@@ -84,7 +85,8 @@ for (let i = 0; i < numbers.length; i++) {
 
 console.info(finalWinner);
 if (finalWinner) {
-  console.info(finalWinner.unmarked * finalWinner.num);
+  answer = finalWinner.unmarked * finalWinner.num;
 }
 
+console.info("Answer:", answer);
 console.timeEnd("Run time");
