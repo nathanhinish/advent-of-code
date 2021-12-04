@@ -1,3 +1,6 @@
+console.time("Run time");
+process.chdir(__dirname);
+
 const getLinesOfFile = require("../common/getLinesOfFile");
 const lineLen = 12;
 const lines = getLinesOfFile("./input").sort().reverse();
@@ -39,3 +42,5 @@ const co2 = parseInt(co2lines[0], 2);
 console.info("O2 ", o2lines, o2);
 console.info("CO2", co2lines, co2);
 console.info(o2 * co2);
+
+console.timeEnd("Run time");

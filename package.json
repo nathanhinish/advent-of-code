@@ -1,0 +1,19 @@
+{
+  "name": "adventofcode",
+  "version": "1.0.0",
+  "description": "Javascript solutions for [Advent of Code](https://adventofcode.com/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathanhinish/advent-of-code.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nathanhinish/advent-of-code/issues"
+  },
+  "homepage": "https://github.com/nathanhinish/advent-of-code#readme"
+}

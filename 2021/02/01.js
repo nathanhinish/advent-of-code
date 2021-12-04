@@ -1,3 +1,6 @@
+console.time("Run time");
+process.chdir(__dirname);
+
 const getLinesOfFile = require("../common/getLinesOfFile");
 const lines = getLinesOfFile("./input");
 
@@ -25,3 +28,5 @@ lines.forEach((l) => {
 });
 
 console.info(vPos * hPos);
+
+console.timeEnd("Run time");

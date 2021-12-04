@@ -1,3 +1,6 @@
+console.time("Run time");
+process.chdir(__dirname);
+
 const getLinesOfFile = require("../common/getLinesOfFile");
 const lineLen = 12;
 
@@ -21,3 +24,5 @@ const e = parseInt(epses.join(""), 2);
 console.info("GAMMA", g, gammas.join(""));
 console.info("EPS  ", e, epses.join(""));
 console.info("PROD ", g * e);
+
+console.timeEnd("Run time");
