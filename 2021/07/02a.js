@@ -16,9 +16,9 @@ const maxPos = Math.max(...positions);
 let leastCost = Number.POSITIVE_INFINITY;
 
 // Precalculate fibonacci numbers
-const fibs = [0, 1];
+const costPerTotalMovement = [0, 1];
 for (let i = 2; i <= maxPos; i++) {
-  fibs[i] = i + fibs[i - 1];
+  costPerTotalMovement[i] = i + costPerTotalMovement[i - 1];
 }
 
 // Get unique positions
@@ -37,7 +37,7 @@ for (let moveToPos = minPos; moveToPos <= maxPos; moveToPos++) {
     const startPos = uniqPositions[uniqCrab];
     const diff = Math.abs(startPos - moveToPos);
     if (diff > 0) {
-      costPerPosition[uniqCrab] = fibs[diff] * numOfPosInstances[startPos];
+      costPerPosition[uniqCrab] = costPerTotalMovement[diff] * numOfPosInstances[startPos];
     }
   }
   const totalCost = costPerPosition.reduce((acc, v) => acc + (v || 0), 0);
