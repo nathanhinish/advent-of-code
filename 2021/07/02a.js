@@ -37,7 +37,8 @@ for (let moveToPos = minPos; moveToPos <= maxPos; moveToPos++) {
     const startPos = uniqPositions[uniqCrab];
     const diff = Math.abs(startPos - moveToPos);
     if (diff > 0) {
-      costPerPosition[uniqCrab] = costPerTotalMovement[diff] * numOfPosInstances[startPos];
+      costPerPosition[uniqCrab] =
+        costPerTotalMovement[diff] * numOfPosInstances[startPos];
     }
   }
   const totalCost = costPerPosition.reduce((acc, v) => acc + (v || 0), 0);
