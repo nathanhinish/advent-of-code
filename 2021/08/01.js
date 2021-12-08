@@ -6,8 +6,6 @@ const lines = require("../common/getLinesOfFile")("./input");
 
 const lineOutputs = lines.map((l) => l.split(" | ")[1].split(" "));
 
-console.info(lineOutputs);
-
 const allSingleOutputs = lineOutputs
   .reduce((acc, v) => {
     acc.push(...v);
@@ -18,8 +16,6 @@ let num1 = allSingleOutputs.filter((v) => v === 2).length;
 let num4 = allSingleOutputs.filter((v) => v === 4).length;
 let num7 = allSingleOutputs.filter((v) => v === 3).length;
 let num8 = allSingleOutputs.filter((v) => v === 7).length;
-
-console.info(allSingleOutputs);
 
 // Add code here
 answer = num1 + num4 + num7 + num8;
