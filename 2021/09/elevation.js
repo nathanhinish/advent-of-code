@@ -13,7 +13,7 @@ const COORD_PRINT_INTERVAL = 10;
 const BIGGEST = [
   [81, 65],
   [5, 5],
-  [78, 19],
+  [76, 16],
 ];
 
 const lines = require("../common/getLinesOfFile")("./input");
@@ -40,15 +40,15 @@ for (let y = 0; y < digits.length; y++) {
       (y + 1) * SIZE_PER_SQUARE
     );
 
-    // if (BIGGEST.find((c) => c[0] === x && c[1] === y)) {
-    //   ctx.fillStyle = `red`;
-    //   ctx.fillRect(
-    //     x * SIZE_PER_SQUARE,
-    //     y * SIZE_PER_SQUARE,
-    //     (x + 1) * SIZE_PER_SQUARE,
-    //     (y + 1) * SIZE_PER_SQUARE
-    //   );
-    // }
+    if (BIGGEST.find((c) => c[0] === x && c[1] === y)) {
+      ctx.fillStyle = `red`;
+      ctx.fillRect(
+        x * SIZE_PER_SQUARE,
+        y * SIZE_PER_SQUARE,
+        (x + 1) * SIZE_PER_SQUARE,
+        (y + 1) * SIZE_PER_SQUARE
+      );
+    }
 
     ctx.fillStyle = val < 5 ? "rgb(255, 255, 255)" : "rgb(0, 0, 0)";
     if (x % COORD_PRINT_INTERVAL === 0 && y % COORD_PRINT_INTERVAL === 0) {
