@@ -7,6 +7,7 @@ Javascript solutions for [Advent of Code](https://adventofcode.com/)
 ## Tips (Notes to self, rly)
 
 * Take a few minutes to build out the repeatable tasks. (File generation, etc)
+* **Use the sample data to test against!!!**
 * Step 1 is fast and dirty.
 * Anticipate the changes that are likely coming in the 2nd step, but don't let it slow you down.
 * Step 2 is refinement and covering new logical cases. (2021/06 is a good example)
