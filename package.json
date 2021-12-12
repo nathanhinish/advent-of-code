@@ -4,8 +4,7 @@
   "description": "Javascript solutions for [Advent of Code](https://adventofcode.com/)",
   "main": "index.js",
   "scripts": {
-    "generate": "./scripts/generateDay.sh $1",
-    "test": "node ./scripts/execute_challenge.js"
+    "generate": "./scripts/generateDay.sh $1"
   },
   "repository": {
     "type": "git",
