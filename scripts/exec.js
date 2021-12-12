@@ -7,13 +7,13 @@ const path = require("path");
 const args = Array.from(process.argv).slice(2);
 
 program
-  .option("-t, --test", "Run against the sample data")
+  .option("-i, --input <filename>", "File to run against", "input")
   .argument("<challenge_file>")
   .action((challengeFile) => {
     const opts = program.opts();
 
     const dayDir = path.dirname(challengeFile);
-    const inputFile = opts.test ? "./sample" : "./input";
+    const inputFile = opts.input;
 
     spawnSync("node", [challengeFile, path.join(dayDir, inputFile)], {
       cwd: process.cwd(),
