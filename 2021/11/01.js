@@ -1,10 +1,11 @@
 console.time("Run time");
-process.chdir(__dirname);
 const testForFlash = require("./testForFlash");
 
 let answer;
 
-const lines = require("../common/getLinesOfFile")("./input").map(
+const inputFile = process.argv[2];
+
+const lines = require("../common/getLinesOfFile")(inputFile).map(
   require("../common/map_splitAndParse")
 );
 

@@ -4,7 +4,8 @@
   "description": "Javascript solutions for [Advent of Code](https://adventofcode.com/)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "./scripts/generateDay.sh $1",
+    "test": "node ./scripts/execute_challenge.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/nathanhinish/advent-of-code#readme",
   "dependencies": {
-    "canvas": "^2.8.0"
+    "canvas": "^2.8.0",
+    "commander": "^8.3.0"
   }
 }
