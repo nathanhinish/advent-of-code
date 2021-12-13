@@ -18,6 +18,7 @@
   "homepage": "https://github.com/nathanhinish/advent-of-code#readme",
   "dependencies": {
     "canvas": "^2.8.0",
-    "commander": "^8.3.0"
+    "commander": "^8.3.0",
+    "gifencoder": "^2.0.1"
   }
 }
