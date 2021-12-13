@@ -49,20 +49,43 @@ const uniqCoords = coords
 const maxX = Math.max(...uniqCoords.map((c) => c[0]));
 const maxY = Math.max(...uniqCoords.map((c) => c[1]));
 
+const SIZE_PER_SQUARE = 50;
+const { createCanvas } = require("canvas");
+const canvas = createCanvas(
+  (maxX + 3) * SIZE_PER_SQUARE,
+  (maxY + 3) * SIZE_PER_SQUARE
+);
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = `black`;
+ctx.fillRect(0, 0, (maxX + 3) * SIZE_PER_SQUARE, (maxY + 3) * SIZE_PER_SQUARE);
 let output = "";
-for (let y = 0; y <= maxY; y++) {
-  for (let x = 0; x <= maxX; x++) {
+for (let y = -1; y <= maxY + 1; y++) {
+  for (let x = -1; x <= maxX + 1; x++) {
     const c = uniqCoords.find((c) => c[0] === x && c[1] === y);
     if (c) {
       output += "#";
+      ctx.fillStyle = `white`;
     } else {
       output += " ";
+      ctx.fillStyle = `black`;
     }
+    ctx.fillRect(
+      (x + 1) * SIZE_PER_SQUARE,
+      (y + 1) * SIZE_PER_SQUARE,
+      (x + 2) * SIZE_PER_SQUARE,
+      (y + 2) * SIZE_PER_SQUARE
+    );
   }
   output += "\n";
 }
+const buff = canvas.toBuffer("image/png");
+require("fs").writeFileSync(
+  require("path").join(__dirname, "2021_13_2.png"),
+  buff
+);
 
-answer = output.trim();
+answer = output;
 
-console.info("Answer:", "\n\n" + answer + "\n");
+console.info("Answer:", "\n" + answer);
 console.timeEnd("Run time");
