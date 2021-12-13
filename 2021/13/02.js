@@ -47,7 +47,7 @@ const uniqCoords = coords
   .map((s) => s.split(",").map((v) => parseInt(v, 10)));
 
 const maxX = Math.max(...uniqCoords.map((c) => c[0]));
-const maxY = Math.max(...uniqCoords.map((c) => c[0]));
+const maxY = Math.max(...uniqCoords.map((c) => c[1]));
 
 let output = "";
 for (let y = 0; y <= maxY; y++) {
