@@ -59,7 +59,7 @@ const charCounts = currentState.split("").reduce((acc, v) => {
   }
   return acc;
 }, {});
-const counts = Object.keys(charCounts).map((k) => charCounts[k]);
+const counts = Object.values(charCounts);
 const maxCount = Math.max(...counts);
 const minCount = Math.min(...counts);
 
