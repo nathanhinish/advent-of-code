@@ -12,7 +12,7 @@ function buildLiteralPacket(chars) {
   }
 
   return {
-    content: parseInt(packetContent, 2),
+    value: parseInt(packetContent, 2),
     raw: chars.substring(0, currentPos),
   };
 }
@@ -60,6 +60,38 @@ function buildPacketWithSubNumber(chars) {
   return { raw, subpackets };
 }
 
+const OPERATIONS = {
+  // SU<
+  0: (packets) => packets.reduce((a, p) => a + p.value, 0),
+
+  // PRODUCT
+  1: (packets) => packets.reduce((a, p) => a * p.value, 1),
+
+  // MIN
+  2: (packets) => Math.min(...packets.map((p) => p.value)),
+
+  // MAX
+  3: (packets) => Math.max(...packets.map((p) => p.value)),
+
+  // GT
+  5: (packets) => (packets[0].value > packets[1].value ? 1 : 0),
+
+  // LT
+  6: (packets) => (packets[0].value < packets[1].value ? 1 : 0),
+
+  // EQ
+  7: (packets) => (packets[0].value === packets[1].value ? 1 : 0),
+};
+
+function runOperation(typeId, subpackets) {
+  const op = OPERATIONS[typeId];
+  if (!op) {
+    throw new Error("Invalid operation type " + typeId);
+  }
+
+  return op(subpackets);
+}
+
 function findNextPacket(chars) {
   const packetVersion = parseInt(chars.substring(0, 3), 2);
   const packetType = parseInt(chars.substring(3, 6), 2);
@@ -86,6 +118,7 @@ function findNextPacket(chars) {
       packetInfo = buildPacketWithSubNumber(chars.substr(7));
     }
 
+    packetInfo.value = runOperation(packetType, packetInfo.subpackets);
     packetInfo.raw = chars.substr(0, 7) + packetInfo.raw;
     packetInfo.lengthType = lengthType;
   }
