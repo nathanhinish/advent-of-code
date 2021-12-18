@@ -1,19 +1,17 @@
 console.time("Run time");
 
+const magnitude = require("./magnitude");
+const sumAllLines = require("./sumAllLines");
+
 let answer;
 
 const inputFile = process.argv[2];
 
-const lines = require("../common/getLinesOfFile")(inputFile).map(
-  require("../common/map_splitAndParse")
-);
+const lines = require("../common/getLinesOfFile")(inputFile).filter((l) => !!l);
 
-for (let y = 0; y < lines.length; y++) {
-  const line = lines[y];
-  for (let x = 0; x < line.length; x++) {
-    // Add code here
-  }
-}
+const sum = sumAllLines(lines);
+
+answer = magnitude(sum);
 
 console.info("Answer:", answer);
 console.timeEnd("Run time");
