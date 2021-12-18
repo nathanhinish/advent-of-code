@@ -16,7 +16,9 @@
     "url": "https://github.com/nathanhinish/advent-of-code/issues"
   },
   "homepage": "https://github.com/nathanhinish/advent-of-code#readme",
-  "dependencies": {},
+  "dependencies": {
+    "gpu.js": "^2.11.4"
+  },
   "devDependencies": {
     "canvas": "^2.8.0",
     "commander": "^8.3.0",
