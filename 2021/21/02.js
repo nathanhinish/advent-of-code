@@ -56,9 +56,17 @@ function performTurn(pos, score, roll) {
   return [newPos, score + newPos];
 }
 
-function constructAllPossibleStates(previousStateStr, multiplier) {
+/**
+ * 
+ * @param {string} previousStateStr A string in the form "P1_POSITION,P1_SCORE,P2_POSITION,P2_SCORE"
+ * @param {*} numUniverses The # of universes the previous state occurred in
+ * @returns 
+ */
+function constructAllPossibleStates(previousStateStr, numUniverses) {
   const [p1Pos, p1Score, p2Pos, p2Score] = keyStr2Num(previousStateStr);
 
+  // If the previous state was already a finished game, 
+  // don't calculate new states.
   if (p1Score >= WINNING_SCORE || p2Score >= WINNING_SCORE) {
     return [];
   }
@@ -67,12 +75,12 @@ function constructAllPossibleStates(previousStateStr, multiplier) {
     const [newP1Pos, newP1Score] = performTurn(p1Pos, p1Score, i);
     if (newP1Score >= WINNING_SCORE) {
       states[`${newP1Pos},${newP1Score},${p2Pos},${p2Score}`] =
-        multiplier * NUM_OCCURRENCES[i];
+        numUniverses * NUM_OCCURRENCES[i];
     } else {
       for (let j = 3; j <= 9; j++) {
         const [newP2Pos, newP2Score] = performTurn(p2Pos, p2Score, j);
         states[`${newP1Pos},${newP1Score},${newP2Pos},${newP2Score}`] =
-          multiplier * NUM_OCCURRENCES[i] * NUM_OCCURRENCES[j];
+          numUniverses * NUM_OCCURRENCES[i] * NUM_OCCURRENCES[j];
       }
     }
   }
