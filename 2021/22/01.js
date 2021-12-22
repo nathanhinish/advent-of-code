@@ -1,61 +1,65 @@
-console.time("Run time");
+console.time("Total run time");
 
-let answer;
-
-const inputFile = process.argv[2];
-
-const EXPECTED_OUTPUT = ([
-  ["sample1", 39],
-  ["sample2", 590784],
-].find((entry) => inputFile.includes(entry[0])) || [])[1];
-
+console.time("Init run time");
 const assert = require("assert");
-const intersect = require("./intersect");
-const isValidRegion = require("./isValidRegion");
-const instructions = require("./parse")(inputFile)
-  .map((instruction) => {
-    return {
-      ...instruction,
-      region: intersect([-50, 50, -50, 50, -50, 50], instruction.region),
-    };
-  })
-  .filter((i) => isValidRegion(i.region));
+const parse = require("./parse");
 
-const reactorState = Array(101)
-  .fill(0)
-  .map(() =>
-    Array(101)
-      .fill(0)
-      .map(() => Array(101).fill(0))
-  );
+const TEST_FILES = ["sample1", "sample2"];
+const TEST_ANSWERS = {
+  sample1: 39,
+  sample2: 590784,
+};
+const TEST_DATA_SETS = TEST_FILES.reduce(
+  (o, f) => ({
+    ...o,
+    [f]: parse(f),
+  }),
+  {}
+);
+const INPUT_DATA_SET = parse("input", true);
 
-instructions.forEach((instr) => {
-  const { operation, region } = instr;
+function run(key, data) {
+  const reactorState = {};
+  data.forEach((instr, i) => {
+    const { operation, region } = instr;
 
-  for (let x = region[0] + 50; x <= region[1] + 50; x++) {
-    for (let y = region[2] + 50; y <= region[3] + 50; y++) {
-      for (let z = region[4] + 50; z <= region[5] + 50; z++) {
-        reactorState[x][y][z] = operation === "on" ? 1 : 0;
+    for (let x = region[0] + 50; x <= region[1] + 50; x++) {
+      for (let y = region[2] + 50; y <= region[3] + 50; y++) {
+        for (let z = region[4] + 50; z <= region[5] + 50; z++) {
+          const key = `${x},${y},${z}`;
+          if (operation === "on") {
+            reactorState[key] = 1;
+          } else {
+            delete reactorState[key];
+          }
+        }
       }
     }
-  }
+  });
+
+  return Object.keys(reactorState).length;
+}
+
+console.timeEnd("Init run time");
+console.info("");
+console.time("Test run time");
+TEST_FILES.forEach((key) => {
+  console.info(`Testing with '${key}' dataset`);
+
+  const result = run(key, TEST_DATA_SETS[key]);
+  assert.equal(result, TEST_ANSWERS[key]);
 });
-let numTurnedOn = 0;
-for (let z = 0; z < reactorState.length; z++) {
-  for (let y = 0; y < reactorState[z].length; y++) {
-    for (let x = 0; x < reactorState[z][y].length; x++) {
-      if (reactorState[z][y][x] === 1) {
-        numTurnedOn++;
-      }
-    }
-  }
-}
-
-answer = numTurnedOn;
-
-if (EXPECTED_OUTPUT != undefined) {
-  assert.equal(answer, EXPECTED_OUTPUT);
-}
-
-console.info("Answer:", answer);
-console.timeEnd("Run time");
+console.timeEnd("Test run time");
+console.info("");
+console.time("Answer run time");
+const result = run("input", INPUT_DATA_SET);
+console.timeEnd("Answer run time");
+console.info("");
+console.timeEnd("Total run time");
+console.info("");
+((r) => {
+  const s = `| ANSWER: ${result.toString()} |`;
+  console.info(Array(s.length).fill("=").join(""));
+  console.info(s);
+  console.info(Array(s.length).fill("=").join(""));
+})(result);

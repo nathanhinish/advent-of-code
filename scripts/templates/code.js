@@ -16,24 +16,36 @@ const TEST_DATA_SETS = TEST_FILES.reduce(
   {}
 );
 const INPUT_DATA_SET = parse("input");
-console.timeEnd("Init run time");
 
 function run(key, data) {
   console.info(`Running with '${key}' dataset`);
+
   // Add code here
-  return 0;
+  throw new Error("Add custom code");
+
+  return null;
 }
 
-console.time("Sample test run time time");
+console.timeEnd("Init run time");
+console.info("");
+console.time("Test run time");
 TEST_FILES.forEach((key) => {
+  console.info(`Testing with '${key}' dataset`);
+
   const result = run(key, TEST_DATA_SETS[key]);
   assert.equal(result, TEST_ANSWERS[key]);
 });
-console.timeEnd("Sample test run time time");
-
+console.timeEnd("Test run time");
+console.info("");
 console.time("Answer run time");
 const result = run("input", INPUT_DATA_SET);
-console.info("ANSWER:", result);
 console.timeEnd("Answer run time");
-
+console.info("");
 console.timeEnd("Total run time");
+console.info("");
+((r) => {
+  const s = `| ANSWER: ${result.toString()} |`;
+  console.info(Array(s.length).fill("=").join(""));
+  console.info(s);
+  console.info(Array(s.length).fill("=").join(""));
+})(result);

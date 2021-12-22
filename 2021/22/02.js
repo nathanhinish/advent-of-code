@@ -1,143 +1,90 @@
-console.time("Run time");
+console.time("Total run time");
 
+console.time("Init run time");
 const assert = require("assert");
-let answer;
-
-const inputFile = process.argv[2];
-
-const TEST_AGAINST_PART_1 = false;
-
-const EXPECTED_OUTPUT = ([
-  ["sample1", 39],
-  ["sample2", 590784],
-  ["sample3", 2758514936282235],
-  [TEST_AGAINST_PART_1 ? "input" : "somerandomthingthatwontgetchecked", 620241],
-].find((entry) => inputFile.includes(entry[0])) || [])[1];
-
-function shouldConstrainInput() {
-  return [
-    TEST_AGAINST_PART_1 ? "input" : "somerandomthingthatwontgetchecked",
-    "sample1",
-    "sample2",
-  ].some((f) => inputFile.includes(f));
-}
-
-function key(region) {
-  return region.join(",");
-}
-
-function fromKey(key) {
-  return key.split(",").map(Number);
-}
-
-const volume = require("./volume");
+const parse = require("./parse");
 const intersect = require("./intersect");
 const isValidRegion = require("./isValidRegion");
+const RegionMap = require("./RegionMap");
+const volume = require("./volume");
 
-let instructions = require("./parse")(inputFile);
+const TEST_FILES = ["sample1", "sample2", "sample3", "input"];
+const TEST_ANSWERS = {
+  sample1: 39,
+  sample2: 590784,
+  sample3: 2758514936282235,
+  input: 620241,
+};
+const TEST_DATA_SETS = TEST_FILES.reduce(
+  (o, f) => ({
+    ...o,
+    [f]: parse(f, true),
+  }),
+  {}
+);
+const INPUT_DATA_SET = parse("input");
 
-// To run tests against data for part 1
-if (shouldConstrainInput()) {
-  instructions = instructions
-    .map((instruction) => {
-      return {
-        ...instruction,
-        region: intersect([-50, 50, -50, 50, -50, 50], instruction.region),
-      };
-    })
-    .filter((i) => isValidRegion(i.region));
-}
+function run(key, data) {
+  const regions = new RegionMap();
+  for (let i = 0; i < data.length; i++) {
+    const { operation, region } = data[i];
 
-class RegionMap {
-  constructor() {
-    this._map = {};
-  }
+    const newRegions = new RegionMap();
 
-  updateValue(region, value) {
-    if (typeof region !== "string") {
-      region = key(region);
-    }
-    if (this._map[region] === undefined) {
-      this._map[region] = 0;
-    }
-    this._map[region] += value;
-  }
-
-  clean() {
-    Object.keys(this._map).forEach((key) => {
-      if (this._map[key] === 0) {
-        delete this._map[key];
+    // For each existing region, find any intersecting
+    // regions and create a new entry with the negative
+    // value of the existing.
+    // Ex. if an existing region has a value of 3,
+    //     create a new entry with a value of -3
+    regions.each((existingRegion, existingValue) => {
+      const intersectingRegion = intersect(existingRegion, region);
+      if (isValidRegion(intersectingRegion)) {
+        newRegions.updateValue(intersectingRegion, -1 * existingValue);
       }
     });
-  }
 
-  getObject() {
-    return Object.assign({}, this._map);
-  }
-
-  update(map) {
-    if (map.getObject !== undefined) {
-      map = map.getObject();
+    // Now that the intersecting areas have been reset,
+    // we can add the new region as a single entity with
+    // value of 1 if this is an "on" operation.
+    if (operation === "on") {
+      newRegions.updateValue(region, 1);
     }
-    Object.keys(map).forEach((key) => {
-      this.updateValue(key, map[key]);
-    });
+
+    // For easier debugging (gets rid of zero values)
+    // newRegions.clean();
+
+    regions.update(newRegions);
+
+    // Note: this actually does make the algo more performant!
+    regions.clean();
   }
 
-  // (region, value) => {}
-  each(fn) {
-    Object.keys(this._map).forEach((key) => {
-      fn(fromKey(key), this._map[key]);
-    });
-  }
+  const volumes = [];
+  regions.each((region, value) => volumes.push(volume(region) * value));
 
-  toString() {
-    return this.getObject();
-  }
+  return volumes.reduce((sum, v) => sum + v, 0);
 }
 
-const regions = new RegionMap();
-for (let i = 0; i < instructions.length; i++) {
-  const { operation, region } = instructions[i];
+console.timeEnd("Init run time");
+console.info("");
+console.time("Test run time");
+TEST_FILES.forEach((key) => {
+  console.info(`Testing with '${key}' dataset`);
 
-  const newRegions = new RegionMap();
-
-  // For each existing region, find any intersecting
-  // regions and create a new entry with the negative
-  // value of the existing.
-  // Ex. if an existing region has a value of 3,
-  //     create a new entry with a value of -3
-  regions.each((existingRegion, existingValue) => {
-    const intersectingRegion = intersect(existingRegion, region);
-    if (isValidRegion(intersectingRegion)) {
-      newRegions.updateValue(intersectingRegion, -1 * existingValue);
-    }
-  });
-
-  // Now that the intersecting areas have been reset,
-  // we can add the new region as a single entity with
-  // value of 1 if this is an "on" operation.
-  if (operation === "on") {
-    newRegions.updateValue(region, 1);
-  }
-
-  // For easier debugging (gets rid of zero values)
-  // newRegions.clean();
-
-  regions.update(newRegions);
-  
-  // Note: this actually does make the algo more performant!
-  regions.clean();
-}
-
-const volumes = [];
-regions.each((region, value) => volumes.push(volume(region) * value));
-
-answer = volumes.reduce((sum, v) => sum + v, 0);
-
-if (EXPECTED_OUTPUT != undefined) {
-  assert.equal(answer, EXPECTED_OUTPUT);
-}
-
-console.info("Answer:", answer);
-console.timeEnd("Run time");
+  const result = run(key, TEST_DATA_SETS[key]);
+  assert.equal(result, TEST_ANSWERS[key]);
+});
+console.timeEnd("Test run time");
+console.info("");
+console.time("Answer run time");
+const result = run("input", INPUT_DATA_SET);
+console.timeEnd("Answer run time");
+console.info("");
+console.timeEnd("Total run time");
+console.info("");
+((r) => {
+  const s = `| ANSWER: ${result.toString()} |`;
+  console.info(Array(s.length).fill("=").join(""));
+  console.info(s);
+  console.info(Array(s.length).fill("=").join(""));
+})(result);
