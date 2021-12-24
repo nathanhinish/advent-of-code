@@ -1,0 +1,17 @@
+- Most moves possible = n * 2 (n is # of Amphipods)
+
+
+
+Part 1
+Max amount of moves = 16
+Direct line min energy = 9000 + 4000 + 500 + 500 + 60 + 60 + 6 + 7 = 14133
+
+Part 2
+Max amount of moves = 32
+Direct line min energy =
+  11000 + 11000 + 11000 + 4000 + 900 + 900 + 500 + 500 + 10 + 90 + 60 + 60 + 10 + 10 + 10 + 9 =
+    40059
+
+Fill D column = 4 O(D) + 4 I
+Fill C column = 4 O(C) + 2 I + 2 O(D) + 2 I
+Fill B column = 4 O(B) + 1 I + 
